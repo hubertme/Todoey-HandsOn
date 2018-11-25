@@ -54,6 +54,7 @@ class ToDoListViewController: UITableViewController {
             // What will happen once user clicks the Add Item button on UIAlert
             if textField.text != "" {
                 self.itemArray.append(textField.text!)
+                self.tableView.reloadData()
             } else {
                 let alert = UIAlertController(title: "Empty item inputted", message: "Please enter a non-empty text item name", preferredStyle: .alert)
                 let okayAction = UIAlertAction(title: "Okay!", style: .cancel, handler: nil)
