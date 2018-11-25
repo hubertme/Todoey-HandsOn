@@ -11,11 +11,17 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     var itemArray = ["Cuki One", "Cuki Two", "Cuki Three", "Cuki Four"]
+    
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         tableView.tableFooterView = UIView()
+        
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     // MARK: - UITableViewDataSource
@@ -54,7 +60,11 @@ class ToDoListViewController: UITableViewController {
             // What will happen once user clicks the Add Item button on UIAlert
             if textField.text != "" {
                 self.itemArray.append(textField.text!)
+                
+                self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+                
                 self.tableView.reloadData()
+                
             } else {
                 let alert = UIAlertController(title: "Empty item inputted", message: "Please enter a non-empty text item name", preferredStyle: .alert)
                 let okayAction = UIAlertAction(title: "Okay!", style: .cancel, handler: nil)
