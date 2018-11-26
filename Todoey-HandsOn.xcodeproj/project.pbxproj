@@ -54,14 +54,38 @@
 		E4215B3021A7EE7700D2184D /* Todoey-HandsOn */ = {
 			isa = PBXGroup;
 			children = (
-				E4215B3121A7EE7700D2184D /* AppDelegate.swift */,
-				E4215B3321A7EE7700D2184D /* ToDoListViewController.swift */,
-				E4215B3521A7EE7700D2184D /* Main.storyboard */,
+				E470D86221AB98DE0025872A /* Model */,
+				E470D86321AB98E50025872A /* View */,
+				E470D86121AB98D90025872A /* Controller */,
 				E4215B3821A7EE7700D2184D /* Assets.xcassets */,
 				E4215B3A21A7EE7700D2184D /* LaunchScreen.storyboard */,
 				E4215B3D21A7EE7700D2184D /* Info.plist */,
 			);
 			path = "Todoey-HandsOn";
+			sourceTree = "<group>";
+		};
+		E470D86121AB98D90025872A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				E4215B3321A7EE7700D2184D /* ToDoListViewController.swift */,
+				E4215B3121A7EE7700D2184D /* AppDelegate.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		E470D86221AB98DE0025872A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E470D86321AB98E50025872A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E4215B3521A7EE7700D2184D /* Main.storyboard */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

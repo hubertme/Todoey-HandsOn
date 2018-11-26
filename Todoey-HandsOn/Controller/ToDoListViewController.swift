@@ -19,8 +19,16 @@ class ToDoListViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         tableView.tableFooterView = UIView()
         
-        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
-            itemArray = items
+        addItemsToItemArray(amount: 100)
+        
+//        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+//            itemArray = items
+//        }
+    }
+    
+    private func addItemsToItemArray(amount: Int){
+        for i in 0...amount{
+            itemArray.append("\(i)")
         }
     }
     
