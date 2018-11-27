@@ -12,13 +12,14 @@ import CoreData
 class ToDoListViewController: UITableViewController {
     var itemArray: [Item] = []
     
+    // MARK: Persistent container instances
     let defaults = UserDefaults.standard
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-//        loadItems()
+        loadItems()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
@@ -45,7 +46,7 @@ class ToDoListViewController: UITableViewController {
     // MARK: - UITableViewDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        itemArray[indexPath.row].isDone = !(itemArray[indexPath.row].isDone)
+        itemArray[indexPath.row].setValue(!(itemArray[indexPath.row].isDone), forKey: "isDone")
         self.saveItems()
         
         tableView.reloadData()
@@ -96,16 +97,13 @@ class ToDoListViewController: UITableViewController {
         }
     }
     
-//    private func loadItems(){
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//
-//            do {
-//                itemArray = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print("Error in decoding data:", error.localizedDescription)
-//            }
-//        }
-//    }
+    private func loadItems(){
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data:",error.localizedDescription)
+        }
+    }
 }
 
