@@ -7,18 +7,19 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoListViewController: UITableViewController {
     var itemArray: [Item] = []
     
     let defaults = UserDefaults.standard
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-//        addItemsToItemArray() // Hardcode
-        loadItems()
+//        loadItems()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
     // MARK: - UITableViewDataSource
@@ -60,7 +61,12 @@ class ToDoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
             // What will happen once user clicks the Add Item button on UIAlert
             if textField.text != "" {
-                self.itemArray.append(Item(title: textField.text!))
+                
+                let newItem = Item(context: self.context)
+                newItem.title = textField.text!
+                newItem.isDone = false
+                
+                self.itemArray.append(newItem)
                 self.saveItems()
                 self.tableView.reloadData()
                 
@@ -81,39 +87,25 @@ class ToDoListViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    private func addItemsToItemArray(){
-        let newItem = Item(title: "Cuki One")
-        newItem.isDone = true
-        itemArray.append(newItem)
-        let newItem2 = Item(title: "Cuki Two")
-        itemArray.append(newItem2)
-        let newItem3 = Item(title: "Cuki Three")
-        itemArray.append(newItem3)
-        let newItem4 = Item(title: "Cuki Four")
-        itemArray.append(newItem4)
-    }
-    
     // MARK: - Stuffs about property list
     private func saveItems(){
-        let encoder = PropertyListEncoder()
         do{
-            let data = try encoder.encode(self.itemArray)
-            try data.write(to: self.dataFilePath!)
+           try context.save()
         } catch {
-            print("Error encoding item array:",error.localizedDescription)
+            print("Error saving context:",error.localizedDescription)
         }
     }
     
-    private func loadItems(){
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            
-            do {
-                itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error in decoding data:", error.localizedDescription)
-            }
-        }
-    }
+//    private func loadItems(){
+//        if let data = try? Data(contentsOf: dataFilePath!) {
+//            let decoder = PropertyListDecoder()
+//
+//            do {
+//                itemArray = try decoder.decode([Item].self, from: data)
+//            } catch {
+//                print("Error in decoding data:", error.localizedDescription)
+//            }
+//        }
+//    }
 }
 
