@@ -22,7 +22,9 @@ class ToDoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-        loadItems()
+        
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        loadItems(request: request)
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         searchBar.delegate = self
@@ -111,8 +113,7 @@ class ToDoListViewController: UITableViewController {
         }
     }
     
-    private func loadItems(){
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
+    private func loadItems(request: NSFetchRequest<Item>){
         do {
             itemArray = try context.fetch(request)
         } catch {
@@ -124,7 +125,20 @@ class ToDoListViewController: UITableViewController {
 // MARK: -
 extension ToDoListViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
+        loadItems(request: request)
+        
+        tableView.reloadData()
     }
+    
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        print("Tapped!")
+//        loadItems()
+//
+//        tableView.reloadData()
+//    }
 }
 
