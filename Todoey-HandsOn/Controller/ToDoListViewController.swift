@@ -23,8 +23,7 @@ class ToDoListViewController: UITableViewController {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
-        loadItems(request: request)
+        loadItems()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         searchBar.delegate = self
@@ -113,7 +112,7 @@ class ToDoListViewController: UITableViewController {
         }
     }
     
-    private func loadItems(request: NSFetchRequest<Item>){
+    private func loadItems(request: NSFetchRequest<Item> = Item.fetchRequest()){
         do {
             itemArray = try context.fetch(request)
         } catch {
