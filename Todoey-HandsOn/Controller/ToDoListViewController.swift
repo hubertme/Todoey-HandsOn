@@ -124,22 +124,23 @@ class ToDoListViewController: UITableViewController {
 // MARK: -
 extension ToDoListViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         if (searchBar.text != ""){
             request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
             request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+            loadItems(request: request)
+            
+            tableView.reloadData()
         }
-        
-        loadItems(request: request)
-        
-        tableView.reloadData()
     }
     
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        print("Tapped!")
-//        loadItems()
-//
-//        tableView.reloadData()
-//    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("Tapped!")
+        loadItems()
+
+        tableView.reloadData()
+    }
 }
 
