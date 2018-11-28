@@ -15,12 +15,17 @@ class ToDoListViewController: UITableViewController {
     // MARK: Persistent container instances
     let defaults = UserDefaults.standard
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    // MARK: - Outlets
+    @IBOutlet weak var searchBar: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         loadItems()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
+        searchBar.delegate = self
     }
     
     // MARK: - UITableViewDataSource
@@ -74,7 +79,7 @@ class ToDoListViewController: UITableViewController {
                 
                 let newItem = Item(context: self.context)
                 newItem.title = textField.text!
-                newItem.isDone = false
+//                newItem.isDone = false
                 
                 self.itemArray.append(newItem)
                 self.saveItems()
@@ -113,6 +118,13 @@ class ToDoListViewController: UITableViewController {
         } catch {
             print("Error fetching data:",error.localizedDescription)
         }
+    }
+}
+
+// MARK: -
+extension ToDoListViewController: UISearchBarDelegate{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
     }
 }
 
