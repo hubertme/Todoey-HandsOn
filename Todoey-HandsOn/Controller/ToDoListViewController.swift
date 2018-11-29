@@ -115,6 +115,7 @@ class ToDoListViewController: UITableViewController {
     private func loadItems(request: NSFetchRequest<Item> = Item.fetchRequest()){
         do {
             itemArray = try context.fetch(request)
+            tableView.reloadData()
         } catch {
             print("Error fetching data:",error.localizedDescription)
         }
@@ -131,16 +132,17 @@ extension ToDoListViewController: UISearchBarDelegate{
             request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
             request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
             loadItems(request: request)
-            
-            tableView.reloadData()
         }
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("Tapped!")
-        loadItems()
-
-        tableView.reloadData()
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text! == ""{
+            self.loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
     }
 }
 
