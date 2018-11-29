@@ -111,7 +111,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="G8a-Xo-8kg" kind="show" id="Ndm-9o-fOV"/>
+                        <segue destination="G8a-Xo-8kg" kind="show" identifier="goToItems" id="Ndm-9o-fOV"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rBs-HG-5Iq" userLabel="First Responder" sceneMemberID="firstResponder"/>
