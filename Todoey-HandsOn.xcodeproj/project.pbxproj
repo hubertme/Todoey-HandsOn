@@ -13,6 +13,7 @@
 		E4215B3921A7EE7700D2184D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4215B3821A7EE7700D2184D /* Assets.xcassets */; };
 		E4215B3C21A7EE7700D2184D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4215B3A21A7EE7700D2184D /* LaunchScreen.storyboard */; };
 		FC22CDA121ACECE900DE94CE /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC22CD9F21ACECE900DE94CE /* DataModel.xcdatamodeld */; };
+		FCB5449C21AF6B1C0060C7EF /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB5449B21AF6B1C0060C7EF /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		E4215B3B21A7EE7700D2184D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E4215B3D21A7EE7700D2184D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FC22CDA021ACECE900DE94CE /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		FCB5449B21AF6B1C0060C7EF /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			children = (
 				E4215B3321A7EE7700D2184D /* ToDoListViewController.swift */,
 				E4215B3121A7EE7700D2184D /* AppDelegate.swift */,
+				FCB5449B21AF6B1C0060C7EF /* CategoryViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -162,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCB5449C21AF6B1C0060C7EF /* CategoryViewController.swift in Sources */,
 				E4215B3421A7EE7700D2184D /* ToDoListViewController.swift in Sources */,
 				FC22CDA121ACECE900DE94CE /* DataModel.xcdatamodeld in Sources */,
 				E4215B3221A7EE7700D2184D /* AppDelegate.swift in Sources */,
