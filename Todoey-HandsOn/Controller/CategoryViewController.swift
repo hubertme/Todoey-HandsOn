@@ -38,14 +38,20 @@ class CategoryViewController: UITableViewController {
         }
     }
     
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete{
-//            context.delete(categoriesArray[indexPath.row])
-//            categoriesArray.remove(at: indexPath.row)
-//            self.tableView.deleteRows(at: [indexPath], with: .fade)
-//            self.saveCategory()
-//        }
-//    }
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            if let item = categories?[indexPath.row]{
+                do{
+                    try realm.write {
+                        realm.delete(item)
+                    }
+                } catch {
+                    print("Error deleting category:", error.localizedDescription)
+                }
+            }
+            tableView.reloadData()
+        }
+    }
     
     // MARK: - TableView DataSource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
