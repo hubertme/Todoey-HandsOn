@@ -46,6 +46,11 @@ class ToDoListViewController: UITableViewController {
         if let item = todoItems?[indexPath.row]{
             cell.textLabel?.text = item.title
             
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yy HH:mm:ss"
+            cell.detailTextLabel?.text = dateFormatter.string(from: item.dateCreated!)
+            cell.detailTextLabel?.textColor = .gray
+            
             // Swift ternary operator
             // (Value) = (condition) ? (valueIfTrue) : (valueIfFalse)
             cell.accessoryType = item.isDone ? .checkmark : .none
