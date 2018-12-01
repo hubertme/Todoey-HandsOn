@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Initialise Realm
         do {
-            let realm = try Realm()
+            _ = try Realm()
 //            try realm.write {
 //                realm.add(data)
 //            }
