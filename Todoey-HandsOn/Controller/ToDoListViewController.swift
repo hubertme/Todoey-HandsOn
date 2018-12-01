@@ -58,10 +58,15 @@ class ToDoListViewController: UITableViewController {
     
     // MARK: - UITableViewDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        itemArray[indexPath.row].setValue(!(itemArray[indexPath.row].isDone), forKey: "isDone")
-        self.saveItems()
-        
+        if let item = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    item.isDone = !(item.isDone)
+                }
+            } catch {
+                print("Error updating checkmark:", error.localizedDescription)
+            }
+        }
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
