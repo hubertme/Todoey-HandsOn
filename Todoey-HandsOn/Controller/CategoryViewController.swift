@@ -66,7 +66,7 @@ class CategoryViewController: UITableViewController {
     
     // MARK: - Data Manipulation Methods
     func loadCategory(){
-        categories = realm.objects(Category.self)
+        categories = realm.objects(Category.self).sorted(byKeyPath: "name", ascending: true)
         
         tableView.reloadData()
     }
