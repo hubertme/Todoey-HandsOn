@@ -7,19 +7,20 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class ToDoListViewController: UITableViewController {
-    var itemArray: [Item] = []
+    
+    var todoItems: Results<Item>?
     var selectedCategory: Category?{
         didSet{
-//            loadItems()
+            loadItems()
         }
     }
     
     // MARK: Persistent container instances
     let defaults = UserDefaults.standard
-//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     
     // MARK: - Outlets
     @IBOutlet weak var searchBar: UISearchBar!
@@ -37,17 +38,20 @@ class ToDoListViewController: UITableViewController {
         return 1
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return todoItems?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        let item = itemArray[indexPath.row]
-        cell.textLabel?.text = item.title
-        
-        // Swift ternary operator
-        // (Value) = (condition) ? (valueIfTrue) : (valueIfFalse)
-        cell.accessoryType = item.isDone ? .checkmark : .none
+        if let item = todoItems?[indexPath.row]{
+            cell.textLabel?.text = item.title
+            
+            // Swift ternary operator
+            // (Value) = (condition) ? (valueIfTrue) : (valueIfFalse)
+            cell.accessoryType = item.isDone ? .checkmark : .none
+        } else {
+            cell.textLabel?.text = "No items inputted!"
+        }
         
         return cell
     }
@@ -81,14 +85,18 @@ class ToDoListViewController: UITableViewController {
             // What will happen once user clicks the Add Item button on UIAlert
             if textField.text != "" {
                 
-//                let newItem = Item(context: self.context)
-//                newItem.title = textField.text!
-//                newItem.parentCategory = self.selectedCategory
-//
-//                self.itemArray.append(newItem)
-                self.saveItems()
+                if let currentCategory = self.selectedCategory{
+                    do {
+                        try self.realm.write {
+                            let newItem = Item()
+                            newItem.title = textField.text!
+                            currentCategory.items.append(newItem)
+                        }
+                    } catch {
+                        print("Error adding item:", error.localizedDescription)
+                    }
+                }
                 self.tableView.reloadData()
-                
             } else {
                 let alert = UIAlertController(title: "Empty item inputted", message: "Please enter a non-empty text item name", preferredStyle: .alert)
                 let okayAction = UIAlertAction(title: "Okay!", style: .cancel, handler: nil)
@@ -107,32 +115,10 @@ class ToDoListViewController: UITableViewController {
     }
     
     // MARK: - Stuffs about property list
-    private func saveItems(){
-//        do{
-//           try context.save()
-//        } catch {
-//            print("Error saving context:",error.localizedDescription)
-//        }
+    private func loadItems(){
+        todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
+        tableView.reloadData()
     }
-    
-//    private func loadItems(request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil){
-//
-//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name)
-//
-//        if let predicate = predicate{
-//            let compundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, categoryPredicate])
-//            request.predicate = compundPredicate
-//        } else {
-//            request.predicate = categoryPredicate
-//        }
-//
-//        do {
-//            itemArray = try context.fetch(request)
-//            tableView.reloadData()
-//        } catch {
-//            print("Error fetching data:",error.localizedDescription)
-//        }
-//    }
 }
 
 // MARK: - 
