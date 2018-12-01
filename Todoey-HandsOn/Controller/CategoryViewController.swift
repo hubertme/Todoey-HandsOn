@@ -43,6 +43,7 @@ class CategoryViewController: UITableViewController {
             if let item = categories?[indexPath.row]{
                 do{
                     try realm.write {
+                        realm.delete(item.items)
                         realm.delete(item)
                     }
                 } catch {
