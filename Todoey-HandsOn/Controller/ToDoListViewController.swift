@@ -17,6 +17,7 @@ class ToDoListViewController: UITableViewController {
             loadItems()
         }
     }
+    var dateFormatString = "dd MMM yyyy HH:mm:ss"
     
     // MARK: Persistent container instances
     let defaults = UserDefaults.standard
@@ -27,10 +28,13 @@ class ToDoListViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.tableFooterView = UIView()
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         searchBar.delegate = self
+        
+        // Fetch server time
     }
     
     // MARK: - UITableViewDataSource
@@ -47,8 +51,11 @@ class ToDoListViewController: UITableViewController {
             cell.textLabel?.text = item.title
             
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/yy HH:mm:ss"
-            cell.detailTextLabel?.text = dateFormatter.string(from: item.dateCreated!)
+            dateFormatter.dateFormat = dateFormatString
+            dateFormatter.timeZone = TimeZone(abbreviation: "GMT+")
+            if let dateCreatedForCell = item.dateCreated{
+                cell.detailTextLabel?.text = dateFormatter.string(from: dateCreatedForCell)
+            }
             cell.detailTextLabel?.textColor = .gray
             
             // Swift ternary operator
@@ -107,7 +114,20 @@ class ToDoListViewController: UITableViewController {
                         try self.realm.write {
                             let newItem = Item()
                             newItem.title = textField.text!
-                            newItem.dateCreated = Date()
+                            
+                            self.fetchServerTimeReturn({ (date) in
+                                DispatchQueue.main.sync {
+                                    do {
+                                        try self.realm.write {
+                                            newItem.dateCreated = date
+                                        }
+                                        self.tableView.reloadData()
+                                    } catch {
+                                        print("Failed to load server date with error:", error.localizedDescription)
+                                    }
+                                }
+                            })
+                            
                             currentCategory.items.append(newItem)
                         }
                     } catch {
@@ -132,10 +152,31 @@ class ToDoListViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    // MARK: - Stuffs about property list
+    // MARK: - Private functions
     private func loadItems(){
         todoItems = selectedCategory?.items.sorted(byKeyPath: "dateCreated", ascending: false)
         tableView.reloadData()
+    }
+    
+    // Fetch time from server (online)
+    private func fetchServerTimeReturn(_ completion: @escaping (_ resDate: Date) -> Void){
+        guard let url = URL(string: "https://www.google.com") else {return}
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error in fetching server time:", error.localizedDescription)
+            }
+            
+            if let response = response {
+                let httpResponse = response as? HTTPURLResponse
+                if let dateString = httpResponse!.allHeaderFields["Date"] as? String{
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss z"
+                    guard let serverDateAndTime = dateFormatter.date(from: dateString) else {return}
+                    completion(serverDateAndTime)
+                }
+            }
+        }
+        task.resume()
     }
 }
 
