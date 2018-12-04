@@ -17,7 +17,7 @@ class ToDoListViewController: UITableViewController {
             loadItems()
         }
     }
-    var dateFormatString = "dd MMM yyyy HH:mm:ss"
+    var dateFormatString = "dd MMM yyyy, HH:mm:ss"
     
     // MARK: Persistent container instances
     let defaults = UserDefaults.standard
@@ -47,6 +47,7 @@ class ToDoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        cell.detailTextLabel?.text = ""
         if let item = todoItems?[indexPath.row]{
             cell.textLabel?.text = item.title
             
@@ -116,7 +117,7 @@ class ToDoListViewController: UITableViewController {
                             newItem.title = textField.text!
                             
                             self.fetchServerTimeReturn({ (date) in
-                                DispatchQueue.main.sync {
+                                DispatchQueue.main.async {
                                     do {
                                         try self.realm.write {
                                             newItem.dateCreated = date
