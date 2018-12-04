@@ -24,16 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Get path for realm
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
-//        let data = Data()
-//        data.name = "Hubert Wang"
-//        data.age = 19
-        
         // Initialise Realm
         do {
             _ = try Realm()
-//            try realm.write {
-//                realm.add(data)
-//            }
         } catch {
             print("Error in initialising realm:", error.localizedDescription)
         }

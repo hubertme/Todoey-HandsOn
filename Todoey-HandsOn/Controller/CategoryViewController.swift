@@ -43,6 +43,7 @@ class CategoryViewController: UITableViewController {
             if let item = categories?[indexPath.row]{
                 do{
                     try realm.write {
+                        // Cascade delete
                         realm.delete(item.items)
                         realm.delete(item)
                     }
